@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PlanetCP redirection page</title>
+</head>
+<body>
+
+
+<script type="application/javascript">
+  function loadURLShim() {
+    if (window.URL && window.URL.prototype && ('href' in window.URL.prototype)) return;
+
+    window.URL = function shimURL(url, base) {
+      var iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.contentWindow.document.write('<base href="' + base + '"><a href="' + url + '"></a>');
+      var a = iframe.contentWindow.document.querySelector('a');
+      document.body.removeChild(iframe);
+      return a;
+    }
+  }
+
+  loadURLShim();
+
+  function gup( name, url ) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+  }
+
+
+  var url = new URL(window.location);
+  var myCPHref = "https://my.centerparcs.com/";
+  var link = gup('link', url);
+  var redirAlreadyDone = gup ('redirDone', url);
+  var deepLinkUrl = window.location.protocol + "//" + window.location.hostname;
+  if (window.location.port !== "") {
+    deepLinkUrl += ':' + window.location.port;
+  }
+  deepLinkUrl += "/landing-page?link=" + link;
+  console.log(deepLinkUrl);
+
+  var appStoreLink = "itms-apps://itunes.apple.com/fr/app/planet-center-parcs/id1016903382?mt=8";
+  var googlePlayLink = "http://play.google.com/store/apps/details?id=com.planet.centerparcs"
+
+  var isMobile = {
+    Android: function() {
+      return navigator.userAgent.match(/Android/i);
+    },
+    iOS: function() {
+      return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    any: function() {
+      return (isMobile.Android() || isMobile.iOS());
+    }
+  };
+
+  if (!isMobile.any()) {
+    window.location.replace(myCPHref);
+  } else if (isMobile.iOS()) {
+    // preventing ios only redirection loop
+    if (redirAlreadyDone == null) {
+      window.location = deepLinkUrl + "&redirDone=1";
+    } else {
+      setTimeout(function() {
+        window.open(appStoreLink, "_system", "location=no");
+      }, 25);
+    }
+  } else if (isMobile.Android()) {
+    setTimeout(function() {
+      window.location.replace(googlePlayLink);
+    }, 25);
+    window.location = deepLinkUrl;
+  } else {
+    alert('Une erreur est survenue');
+  }
+
+</script>
+</body>
+</html>
