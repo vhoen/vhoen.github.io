@@ -66,14 +66,9 @@
   if (!isMobile.any()) {
     window.location.replace(myCPHref);
   } else if (isMobile.iOS()) {
-    // preventing ios only redirection loop
-    if (redirAlreadyDone == null) {
-      window.location = deepLinkUrl + "&redirDone=1";
-    } else {
-      setTimeout(function() {
-        window.open(appStoreLink, "_system", "location=no");
-      }, 25);
-    }
+    setTimeout(function() {
+      window.open(appStoreLink, "_system", "location=no");
+    }, 25);
   } else if (isMobile.Android()) {
     setTimeout(function() {
       window.location.replace(googlePlayLink);
