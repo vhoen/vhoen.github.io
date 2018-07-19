@@ -6,10 +6,44 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PlanetCP redirection page</title>
+  <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+    .buttonsContainer {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      height: 100%;
+      width: auto;
+      align-items: center;
+      justify-content: center;
+    }
+    .button {
+      background-color: #ff9c15;
+      margin: 10px;
+      width: 200px;
+      height: 50px;
+      color: white;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
 
-  <p>Azer</p>
+  <div id="ios-action" class="buttonsContainer" style="visibility: hidden">
+    <a id="install-app" class="button" href="">Install App</a>
+    <a id="open-app" class="button" href="">Open App</a>
+  </div>
 
 <script type="application/javascript">
   function loadURLShim() {
@@ -64,18 +98,26 @@
     }
   };
 
-  if (!isMobile.any()) {
-    window.location.replace(myCPHref);
-  } else if (isMobile.iOS()) {
-    console.log('no redirection');
-  } else if (isMobile.Android()) {
-    setTimeout(function() {
-      window.location.replace(googlePlayLink);
-    }, 25);
-    window.location = deepLinkUrl;
-  } else {
-    alert('Une erreur est survenue');
-  }
+  // if (!isMobile.any()) {
+  //   window.location.replace(myCPHref);
+  // } else if (isMobile.iOS()) {
+    var iosActionElem = document.querySelector('#ios-action');
+    var installAppElem = iosActionElem.querySelector('#install-app');
+    var openAppElem = iosActionElem.querySelector('#open-app');
+
+    installAppElem.href = appStoreLink;
+    openAppElem.href = deepLinkUrl;
+
+    iosActionElem.style.visibility = 'visible';
+
+  // } else if (isMobile.Android()) {
+  //   setTimeout(function() {
+  //     window.location.replace(googlePlayLink);
+  //   }, 25);
+  //   window.location = deepLinkUrl;
+  // } else {
+  //   alert('Une erreur est survenue');
+  // }
 
 </script>
 </body>
