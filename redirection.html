@@ -9,6 +9,7 @@
 </head>
 <body>
 
+  <p>Azer</p>
 
 <script type="application/javascript">
   function loadURLShim() {
@@ -66,9 +67,7 @@
   if (!isMobile.any()) {
     window.location.replace(myCPHref);
   } else if (isMobile.iOS()) {
-    setTimeout(function() {
-      window.open(appStoreLink, "_system", "location=no");
-    }, 25);
+    console.log('no redirection');
   } else if (isMobile.Android()) {
     setTimeout(function() {
       window.location.replace(googlePlayLink);
